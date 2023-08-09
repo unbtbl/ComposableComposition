@@ -10,7 +10,7 @@ public extension ViewStore {
     @discardableResult
     func send<LocalAction, ParentAction>(
         _ localAction: LocalAction
-    ) -> ViewStoreTask where ViewAction == ComposedAction<LocalAction, ParentAction> {
+    ) -> StoreTask where ViewAction == ComposedAction<LocalAction, ParentAction> {
         send(.local(localAction))
     }
 
@@ -24,7 +24,7 @@ public extension ViewStore {
     func send<LocalAction, ParentAction>(
         _ localAction: LocalAction,
         animation: Animation?
-    ) -> ViewStoreTask where ViewAction == ComposedAction<LocalAction, ParentAction> {
+    ) -> StoreTask where ViewAction == ComposedAction<LocalAction, ParentAction> {
         send(.local(localAction), animation: animation)
     }
 
@@ -38,7 +38,7 @@ public extension ViewStore {
     func send<LocalAction, ParentAction>(
         _ localAction: LocalAction,
         transaction: Transaction
-    ) -> ViewStoreTask where ViewAction == ComposedAction<LocalAction, ParentAction> {
+    ) -> StoreTask where ViewAction == ComposedAction<LocalAction, ParentAction> {
         send(.local(localAction), transaction: transaction)
     }
 
