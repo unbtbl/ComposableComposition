@@ -1,13 +1,13 @@
 import ComposableArchitecture
 
-// This is really an extension to EffectTask, which is a typealias to EffectPublisher
-public extension EffectPublisher where Failure == Never {
+// This is really an extension to Effect, which is a typealias to EffectPublisher
+public extension Effect {
     /// Transforms the actions of the task using the provided transform function.
     /// The transformed actions are wrapped in a `ComposedAction` as local actions.
     ///
     /// - Parameter transform: A function that transforms the actions of the publisher into local actions.
     /// - Returns: An `EffectPublisher` that publishes composed actions with the transformed local actions.
-    func map<LocalAction, ParentAction>(_ transform: @escaping (Action) -> LocalAction) -> EffectPublisher<ComposedAction<LocalAction, ParentAction>, Failure> {
+    func map<LocalAction, ParentAction>(_ transform: @escaping (Action) -> LocalAction) -> Effect<ComposedAction<LocalAction, ParentAction>> {
         return self.map { (action: Action) -> ComposedAction<LocalAction, ParentAction> in
             let local = transform(action)
             return ComposedAction<LocalAction, ParentAction>.local(local)

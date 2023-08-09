@@ -2,7 +2,7 @@ import ComposableArchitecture
 
 /// A protocol for a reducer that can handle actions that are local to a specific component or pass others to a parent component for handling.
 /// This protocol is useful in conjunction with `ComposedState`.
-public protocol ComposedActionReducer: ReducerProtocol where Action == ComposedAction<LocalAction, ParentAction> {
+public protocol ComposedActionReducer: Reducer where Action == ComposedAction<LocalAction, ParentAction> {
     associatedtype LocalAction
     associatedtype ParentAction
 
@@ -12,7 +12,7 @@ public protocol ComposedActionReducer: ReducerProtocol where Action == ComposedA
     ///   - state: A reference to the current state that can be modified.
     ///   - action: The action to handle.
     /// - Returns: An effect task that encapsulates work to be done in response to the action.
-    func reduce(into state: inout State, action: LocalAction) -> EffectTask<Action>
+    func reduce(into state: inout State, action: LocalAction) -> Effect<Action>
 }
 
 public extension ComposedActionReducer {
@@ -22,7 +22,7 @@ public extension ComposedActionReducer {
     ///   - state: A reference to the current state that can be modified.
     ///   - action: The action to handle.
     /// - Returns: An effect task that encapsulates work to be done in response to the action.
-    func core(into state: inout State, action: Action) -> EffectTask<Action> {
+    func core(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .local(let local):
             return self.reduce(into: &state, action: local)
@@ -34,7 +34,7 @@ public extension ComposedActionReducer {
 
 /// A default implementation of `reduce(into:action:)` for reducers that don't have a `body`.
 public extension ComposedActionReducer where Body == Never {
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    func reduce(into state: inout State, action: Action) -> Effect<Action> {
         core(into: &state, action: action)
     }
 }
